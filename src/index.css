@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-Rubik bg-primary-lightGrayishBlue/30;
+  }
+
+  p {
+    @apply text-neutral-grayishBlue;
+  }
+}
