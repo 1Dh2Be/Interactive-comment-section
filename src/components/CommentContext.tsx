@@ -1,43 +1,37 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import { CommentInterface, GetUserComment } from "../utils/GetUserComment";
+import data from "../data.json";
 
-interface CounterContextInterface {
-  count: number;
-  setCount: (count: number) => void;
-  increment: () => void;
-  decrement: () => void;
+interface CommentsContextProps {
+  comments: CommentInterface[];
+  addComment: (newComment: CommentInterface) => void;
 }
 
-export const CounterContext = createContext<
-  CounterContextInterface | undefined
->(undefined);
+const CommentsContext = createContext<CommentsContextProps | undefined>(
+  undefined
+);
 
-interface CounterProviderProps {
-  children: ReactNode;
-}
+export const CommentProvider = ({ children }: { children: ReactNode }) => {
+  const initialComments = data.comments.map(GetUserComment);
 
-export const CounterProvider = ({ children }: CounterProviderProps) => {
-  const [count, setCount] = useState(0);
+  const [comments, setComments] = useState<CommentInterface[]>(initialComments);
 
-  const increment = () => setCount((prevCount) => prevCount + 1);
-  const decrement = () => setCount((prevCount) => prevCount - 1);
-
-  const value = {
-    count,
-    setCount,
-    increment,
-    decrement,
+  const addComment = (newComments: CommentInterface) => {
+    setComments((prevComments) => [...prevComments, newComments]);
   };
 
   return (
-    <CounterContext.Provider value={value}>{children}</CounterContext.Provider>
+    <CommentsContext.Provider value={{ comments, addComment }}>
+      {children}
+    </CommentsContext.Provider>
   );
 };
 
-export const useCounter = () => {
-  const context = useContext(CounterContext);
+export const useComment = () => {
+  const context = useContext(CommentsContext);
 
   if (!context) {
-    throw new Error("useCounter must be used within a CounterProvider");
+    throw new Error("useComment must be used inside a CommentProvider");
   }
 
   return context;
