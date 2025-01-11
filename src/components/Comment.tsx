@@ -1,10 +1,23 @@
-import userAvatar from "../assets/images/avatars/image-maxblagun.png";
-import data from "../data.json";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import { useState } from "react";
+import { CommentInterface } from "../utils/GetUserComment";
 
-export const Comment = () => {
+interface CommentProps {
+  avatar: string;
+  username: string;
+  date: string;
+  content: string;
+  replies: CommentInterface[];
+}
+
+export const Comment = ({
+  avatar,
+  username,
+  date,
+  content,
+  replies,
+}: CommentProps) => {
   const [count, setCount] = useState<number>(0);
 
   const increment = () => setCount((prevCount) => prevCount + 1);
@@ -21,17 +34,13 @@ export const Comment = () => {
     <div className="h-64 rounded-xl bg-white mt-4 p-4 flex flex-col gap-3">
       <div className="flex items-center gap-4">
         <div className="w-10 h-10">
-          <img
-            className="w-full h-full"
-            src={userAvatar}
-            alt="User avatar image"
-          />
+          <img className="w-full h-full" src={avatar} alt="User avatar image" />
         </div>
-        <h2 className="text-neutral-darkBlue font-medium">maxblagun</h2>
-        <span className="text-neutral-grayishBlue">2 weeks ago</span>
+        <h2 className="text-neutral-darkBlue font-medium">{username}</h2>
+        <span className="text-neutral-grayishBlue">{date}</span>
       </div>
 
-      <p>{data.comments[0]?.content}</p>
+      <p>{content}</p>
 
       <div>
         <div className="w-20 h-8 rounded-lg bg-primary-lightGrayishBlue/30 flex justify-between items-center px-2">
@@ -48,6 +57,19 @@ export const Comment = () => {
           />
         </div>
       </div>
+      {replies && replies.length > 0 && (
+        <div>
+          {replies.map((reply: any) => (
+            <Comment
+              avatar={reply.avatar}
+              username={reply.username}
+              date={reply.createdAt}
+              content={reply.content}
+              replies={reply.replies}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
