@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CommentInterface } from "../utils/GetUserComment";
 
 export const Comment = ({
+  id,
   avatar,
   username,
   date,
@@ -65,6 +66,8 @@ export const Comment = ({
         <div className="w-11/12">
           {replies.map((reply: any) => (
             <Comment
+              key={reply.id}
+              id={id}
               avatar={reply.avatar}
               username={reply.username}
               date={reply.date}

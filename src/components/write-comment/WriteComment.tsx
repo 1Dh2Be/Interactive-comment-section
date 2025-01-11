@@ -23,6 +23,9 @@ export const WriteComment = () => {
               className="w-full h-[60%] border rounded-md px-5 pt-3 outline-none"
               name="comment"
               placeholder="Add a comment..."
+              onChange={props.handleChange}
+              onBlur={props.handleBlur}
+              value={props.values.comment}
             />
             <div className="flex justify-between">
               <img className="w-9 h-9" src={avatar} alt="Avatar icon" />

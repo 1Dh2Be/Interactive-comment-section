@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 export interface CommentInterface {
+  id: number;
   content: ReactNode;
   date: string;
   score: number;
@@ -14,6 +15,7 @@ export interface ReplyInterface extends Omit<CommentInterface, "replies"> {
 }
 
 export const GetUserComment = (data: {
+  id: number;
   content: ReactNode;
   createdAt: string;
   score: number;
@@ -23,6 +25,7 @@ export const GetUserComment = (data: {
   };
   replies?:
     | {
+        id: number;
         content: ReactNode;
         createdAt: string;
         score: number;
@@ -35,6 +38,7 @@ export const GetUserComment = (data: {
     | null;
 }): CommentInterface => {
   const comment: CommentInterface = {
+    id: data.id,
     content: data.content,
     date: data.createdAt,
     score: data.score,
@@ -42,6 +46,7 @@ export const GetUserComment = (data: {
     username: data.user.username,
     replies: data.replies
       ? data.replies.map((reply) => ({
+          id: reply.id,
           content: reply.content,
           date: reply.createdAt,
           score: reply.score,
