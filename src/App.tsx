@@ -1,6 +1,6 @@
 import { Comment } from "./components/Comment";
 import { CounterProvider } from "./components/CommentContext";
-import { WriteComment } from "./components/WriteComment";
+import { WriteComment } from "./components/write-comment/WriteComment";
 
 function App() {
   return (

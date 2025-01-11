@@ -1,8 +1,11 @@
+import { GetCurrentUser } from "../../utils/GetCurrentUser";
+import DottedButton from "./DottedButton";
 import { Form, Formik } from "formik";
-import Avatar from "../assets/images/avatars/image-ramsesmiron.png";
-import DottedButton from "../utils/DottedButton";
+import data from "../../data.json";
 
 export const WriteComment = () => {
+  const { avatar } = GetCurrentUser(data);
+
   return (
     <div className="p-4 rounded-md relative z-0 bg-white h-full">
       <Formik
@@ -22,7 +25,7 @@ export const WriteComment = () => {
               placeholder="Add a comment..."
             />
             <div className="flex justify-between">
-              <img className="w-9 h-9" src={Avatar} alt="Avatar icon" />
+              <img className="w-9 h-9" src={avatar} alt="Avatar icon" />
               <DottedButton />
             </div>
           </Form>

@@ -2,10 +2,20 @@ import userAvatar from "../assets/images/avatars/image-maxblagun.png";
 import data from "../data.json";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
-import { useCounter } from "./CommentContext";
+import { useState } from "react";
 
 export const Comment = () => {
-  const { count, increment, decrement } = useCounter();
+  const [count, setCount] = useState<number>(0);
+
+  const increment = () => setCount((prevCount) => prevCount + 1);
+  const decrement = () => {
+    setCount((prevCount) => {
+      if (prevCount === 0) {
+        return prevCount;
+      }
+      return prevCount - 1;
+    });
+  };
 
   return (
     <div className="h-64 rounded-xl bg-white mt-4 p-4 flex flex-col gap-3">
