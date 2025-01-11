@@ -1,14 +1,20 @@
+import { ReactNode } from "react";
+
 export interface CommentInterface {
-  content: string;
+  content: ReactNode;
   date: string;
   score: number;
   avatar: string;
   username: string;
-  replies?: CommentInterface[];
+  replies?: ReplyInterface[];
+}
+
+export interface ReplyInterface extends Omit<CommentInterface, "replies"> {
+  replyingTo: string;
 }
 
 export const GetUserComment = (data: {
-  content: string;
+  content: ReactNode;
   createdAt: string;
   score: number;
   user: {
@@ -17,9 +23,10 @@ export const GetUserComment = (data: {
   };
   replies?:
     | {
-        content: string;
+        content: ReactNode;
         createdAt: string;
         score: number;
+        replyingTo: string;
         user: {
           image: { png: string };
           username: string;
@@ -38,6 +45,7 @@ export const GetUserComment = (data: {
           content: reply.content,
           date: reply.createdAt,
           score: reply.score,
+          replyingTo: reply.replyingTo,
           avatar: reply.user.image.png,
           username: reply.user.username,
         }))

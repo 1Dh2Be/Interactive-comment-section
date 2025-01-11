@@ -10,7 +10,7 @@ function App() {
       <main className="w-11/12 h-screen lg:w-4/5 mx-auto flex flex-col">
         <section className="flex-[80%] overflow-auto">
           {data.comments.map((comment) => {
-            const { avatar, username, content, date, replies } =
+            const { avatar, username, content, date, replies, score } =
               GetUserComment(comment);
             return (
               <Comment
@@ -18,6 +18,7 @@ function App() {
                 username={username}
                 date={date}
                 content={content}
+                score={score}
                 replies={replies || []}
               />
             );

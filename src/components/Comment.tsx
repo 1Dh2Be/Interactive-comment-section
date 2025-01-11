@@ -1,24 +1,18 @@
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+import { FaReply } from "react-icons/fa";
 import { useState } from "react";
 import { CommentInterface } from "../utils/GetUserComment";
-
-interface CommentProps {
-  avatar: string;
-  username: string;
-  date: string;
-  content: string;
-  replies: CommentInterface[];
-}
 
 export const Comment = ({
   avatar,
   username,
   date,
   content,
+  score,
   replies,
-}: CommentProps) => {
-  const [count, setCount] = useState<number>(0);
+}: CommentInterface) => {
+  const [count, setCount] = useState<number>(score);
 
   const increment = () => setCount((prevCount) => prevCount + 1);
   const decrement = () => {
@@ -34,7 +28,7 @@ export const Comment = ({
     <div className="w-full flex flex-col items-end">
       <div className="h-64 rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10">
+          <div className="w-9 h-9">
             <img
               className="w-full h-full"
               src={avatar}
@@ -42,12 +36,12 @@ export const Comment = ({
             />
           </div>
           <h2 className="text-neutral-darkBlue font-medium">{username}</h2>
-          <span className="text-neutral-grayishBlue">{date}</span>
+          <span className="text-neutral-grayishBlue text-sm">{date}</span>
         </div>
 
         <p>{content}</p>
 
-        <div>
+        <div className="flex justify-between items-center">
           <div className="w-20 h-8 rounded-lg bg-primary-lightGrayishBlue/30 flex justify-between items-center px-2">
             <FaPlus
               onClick={increment}
@@ -61,6 +55,10 @@ export const Comment = ({
               size="12px"
             />
           </div>
+          <div className="flex gap-3 items-center">
+            <FaReply className="text-primary-moderateBlue" />
+            <p className="font-medium text-primary-moderateBlue">Reply</p>
+          </div>
         </div>
       </div>
       {replies && replies.length > 0 && (
@@ -69,8 +67,18 @@ export const Comment = ({
             <Comment
               avatar={reply.avatar}
               username={reply.username}
-              date={reply.createdAt}
-              content={reply.content}
+              date={reply.date}
+              content={
+                <span>
+                  {reply.replyingTo && (
+                    <span className="text-primary-moderateBlue font-medium">
+                      @{reply.replyingTo}
+                    </span>
+                  )}{" "}
+                  {reply.content}
+                </span>
+              }
+              score={reply.score}
               replies={reply.replies}
             />
           ))}
