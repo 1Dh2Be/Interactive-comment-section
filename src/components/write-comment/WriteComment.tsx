@@ -2,19 +2,29 @@ import { GetCurrentUser } from "../../utils/GetCurrentUser";
 import DottedButton from "./DottedButton";
 import { Form, Formik } from "formik";
 import data from "../../data.json";
+import { useComment } from "../CommentContext";
 
 export const WriteComment = () => {
-  const { avatar } = GetCurrentUser(data);
+  const { avatar, username } = GetCurrentUser(data);
+
+  const { addComment, newId } = useComment();
 
   return (
     <div className="p-4 rounded-md relative z-0 bg-white h-full">
       <Formik
         initialValues={{ comment: "" }}
         onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 1000);
+          addComment({
+            id: newId(),
+            username,
+            avatar,
+            date: "just now",
+            content: <span>{values.comment}</span>,
+            score: 0,
+            replies: [],
+          });
+          actions.setSubmitting(false);
+          actions.resetForm();
         }}
       >
         {(props) => (

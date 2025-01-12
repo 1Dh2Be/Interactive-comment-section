@@ -27,7 +27,7 @@ export const Comment = ({
 
   return (
     <div className="w-full flex flex-col items-end">
-      <div className="h-64 rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
+      <div className="h-fit rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
         <div className="flex items-center gap-4">
           <div className="w-9 h-9">
             <img
