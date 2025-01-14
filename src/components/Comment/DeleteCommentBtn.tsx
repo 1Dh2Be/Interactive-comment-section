@@ -3,6 +3,7 @@ import { IoIosWarning } from "react-icons/io";
 import { useComment } from "../CommentContext";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { anim } from "../../utils/Anim";
 
 interface DeleteCommentBtnProps {
   id: number;
@@ -51,15 +52,6 @@ export const Modal = ({
   onDelete: () => void;
   onClickOutside: () => void;
 }) => {
-  const anim = ({ variants }: { variants: typeof ModalVariants }) => {
-    return {
-      initial: "initial",
-      animate: "scale",
-      exit: "exit",
-      variants,
-    };
-  };
-
   const ModalVariants = {
     initial: {
       scale: 0,
@@ -67,7 +59,7 @@ export const Modal = ({
       x: "-50%",
       y: "-50%",
     },
-    scale: {
+    animate: {
       scale: 1,
       rotate: 0,
       x: "-50%",
