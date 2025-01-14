@@ -9,6 +9,7 @@ import { DeleteCommentBtn } from "./DeleteCommentBtn";
 import { EditComment } from "./EditComment";
 import { anim } from "../../utils/Anim";
 import { AnimatePresence, motion } from "motion/react";
+import { WriteComment } from "../write-comment/WriteComment";
 
 export const Comment = ({
   id,
@@ -20,18 +21,6 @@ export const Comment = ({
   replies,
 }: CommentInterface) => {
   const [count, setCount] = useState<number>(score);
-
-  const increment = () => setCount((prevCount) => prevCount + 1);
-  const decrement = () => {
-    setCount((prevCount) => {
-      if (prevCount === 0) {
-        return prevCount;
-      }
-      return prevCount - 1;
-    });
-  };
-
-  const CurrentUser = GetCurrentUser(data);
 
   const commentVariants = {
     initial: {
@@ -57,6 +46,21 @@ export const Comment = ({
       },
     },
   };
+
+  const increment = () => setCount((prevCount) => prevCount + 1);
+  const decrement = () => {
+    setCount((prevCount) => {
+      if (prevCount === 0) {
+        return prevCount;
+      }
+      return prevCount - 1;
+    });
+  };
+
+  const CurrentUser = GetCurrentUser(data);
+
+  const [openReply, setOpenReply] = useState(false);
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -101,13 +105,21 @@ export const Comment = ({
                 <EditComment />
               </div>
             ) : (
-              <div className="flex gap-3 items-center">
+              <div
+                className="flex gap-3 items-center"
+                onClick={() => setOpenReply(true)}
+              >
                 <FaReply className="text-primary-moderateBlue" />
                 <p className="font-medium text-primary-moderateBlue">Reply</p>
               </div>
             )}
           </div>
         </div>
+
+        <div className="w-full my-4">
+          {openReply ? <WriteComment btnText="REPLY" /> : null}
+        </div>
+
         {replies && replies.length > 0 && (
           <div className="w-11/12">
             {replies.map((reply: any) => (

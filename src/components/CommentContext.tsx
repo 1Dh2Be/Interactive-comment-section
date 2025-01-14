@@ -46,7 +46,13 @@ export const CommentProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <CommentsContext.Provider
-      value={{ comments, id, addComment, newId, deleteComment }}
+      value={{
+        comments,
+        id,
+        addComment,
+        newId,
+        deleteComment,
+      }}
     >
       {children}
     </CommentsContext.Provider>

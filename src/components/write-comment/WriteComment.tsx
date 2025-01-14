@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import data from "../../data.json";
 import { useComment } from "../CommentContext";
 
-export const WriteComment = () => {
+export const WriteComment = ({ btnText = "SEND" }) => {
   const { avatar, username } = GetCurrentUser(data);
 
   const { addComment, newId } = useComment();
@@ -39,7 +39,7 @@ export const WriteComment = () => {
             />
             <div className="flex justify-between">
               <img className="w-9 h-9" src={avatar} alt="Avatar icon" />
-              <DottedButton />
+              <DottedButton text={btnText} />
             </div>
           </Form>
         )}
