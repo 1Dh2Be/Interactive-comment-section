@@ -1,4 +1,4 @@
-import { Comment } from "./components/Comment";
+import { Comment } from "./components/Comment/Comment";
 import { useComment } from "./components/CommentContext";
 import { WriteComment } from "./components/write-comment/WriteComment";
 

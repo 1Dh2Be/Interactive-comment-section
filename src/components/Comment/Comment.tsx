@@ -2,12 +2,11 @@ import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import { FaReply } from "react-icons/fa";
 import { useState } from "react";
-import { CommentInterface } from "../utils/GetUserComment";
-import { GetCurrentUser } from "../utils/GetCurrentUser";
-import data from "../data.json";
-import { FaTrash } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
-import { useComment } from "./CommentContext";
+import { CommentInterface } from "../../utils/GetUserComment";
+import { GetCurrentUser } from "../../utils/GetCurrentUser";
+import data from "../../data.json";
+import { DeleteCommentBtn } from "./DeleteCommentBtn";
+import { EditComment } from "./EditComment";
 
 export const Comment = ({
   id,
@@ -18,7 +17,6 @@ export const Comment = ({
   score,
   replies,
 }: CommentInterface) => {
-  const { deleteComment } = useComment();
   const [count, setCount] = useState<number>(score);
 
   const increment = () => setCount((prevCount) => prevCount + 1);
@@ -30,8 +28,6 @@ export const Comment = ({
       return prevCount - 1;
     });
   };
-
-  const handleDelete = () => deleteComment(id);
 
   const CurrentUser = GetCurrentUser(data);
   return (
@@ -68,14 +64,8 @@ export const Comment = ({
           </div>
           {CurrentUser.username === username ? (
             <div className="flex gap-3">
-              <div className="flex items-center gap-1" onClick={handleDelete}>
-                <FaTrash className="text-red-500" size="16px" />
-                <p className="text-red-500 font-medium">Delete</p>
-              </div>
-              <div className="flex items-center gap-1">
-                <MdEdit className="text-primary-moderateBlue" size="20px" />
-                <p className="text-primary-moderateBlue font-medium">Edit</p>
-              </div>
+              <DeleteCommentBtn id={id} />
+              <EditComment />
             </div>
           ) : (
             <div className="flex gap-3 items-center">
