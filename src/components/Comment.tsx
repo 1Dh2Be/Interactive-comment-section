@@ -3,6 +3,11 @@ import { FaMinus } from "react-icons/fa";
 import { FaReply } from "react-icons/fa";
 import { useState } from "react";
 import { CommentInterface } from "../utils/GetUserComment";
+import { GetCurrentUser } from "../utils/GetCurrentUser";
+import data from "../data.json";
+import { FaTrash } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+import { useComment } from "./CommentContext";
 
 export const Comment = ({
   id,
@@ -13,6 +18,7 @@ export const Comment = ({
   score,
   replies,
 }: CommentInterface) => {
+  const { deleteComment } = useComment();
   const [count, setCount] = useState<number>(score);
 
   const increment = () => setCount((prevCount) => prevCount + 1);
@@ -25,6 +31,9 @@ export const Comment = ({
     });
   };
 
+  const handleDelete = () => deleteComment(id);
+
+  const CurrentUser = GetCurrentUser(data);
   return (
     <div className="w-full flex flex-col items-end">
       <div className="h-fit rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
@@ -38,6 +47,7 @@ export const Comment = ({
           </div>
           <h2 className="text-neutral-darkBlue font-medium">{username}</h2>
           <span className="text-neutral-grayishBlue text-sm">{date}</span>
+          <span>{id}</span>
         </div>
 
         <p>{content}</p>
@@ -56,10 +66,23 @@ export const Comment = ({
               size="12px"
             />
           </div>
-          <div className="flex gap-3 items-center">
-            <FaReply className="text-primary-moderateBlue" />
-            <p className="font-medium text-primary-moderateBlue">Reply</p>
-          </div>
+          {CurrentUser.username === username ? (
+            <div className="flex gap-3">
+              <div className="flex items-center gap-1" onClick={handleDelete}>
+                <FaTrash className="text-red-500" size="16px" />
+                <p className="text-red-500 font-medium">Delete</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <MdEdit className="text-primary-moderateBlue" size="20px" />
+                <p className="text-primary-moderateBlue font-medium">Edit</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-3 items-center">
+              <FaReply className="text-primary-moderateBlue" />
+              <p className="font-medium text-primary-moderateBlue">Reply</p>
+            </div>
+          )}
         </div>
       </div>
       {replies && replies.length > 0 && (
@@ -67,7 +90,7 @@ export const Comment = ({
           {replies.map((reply: any) => (
             <Comment
               key={reply.id}
-              id={id}
+              id={reply.id}
               avatar={reply.avatar}
               username={reply.username}
               date={reply.date}
