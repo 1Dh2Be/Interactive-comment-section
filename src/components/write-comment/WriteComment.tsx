@@ -19,7 +19,7 @@ export const WriteComment = ({ btnText = "SEND" }) => {
             username,
             avatar,
             date: "just now",
-            content: <span>{values.comment}</span>,
+            content: values.comment,
             score: 0,
             replies: [],
           });

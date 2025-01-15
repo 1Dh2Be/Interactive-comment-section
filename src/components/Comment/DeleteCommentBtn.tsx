@@ -6,10 +6,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { anim } from "../../utils/Anim";
 
 interface DeleteCommentBtnProps {
+  noText?: boolean;
   id: number;
 }
 
-export const DeleteCommentBtn = ({ id }: DeleteCommentBtnProps) => {
+export const DeleteCommentBtn = ({ noText, id }: DeleteCommentBtnProps) => {
   const { deleteComment } = useComment();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,7 @@ export const DeleteCommentBtn = ({ id }: DeleteCommentBtnProps) => {
         onClick={() => setIsOpen(true)}
       >
         <FaTrash className="text-red-500" size="16px" />
-        <p className="text-red-500 font-medium">Delete</p>
+        {!noText && <p className="text-red-500 font-medium">Delete</p>}
       </div>
       <Modal
         isOpen={isOpen}

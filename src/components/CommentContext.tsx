@@ -8,6 +8,8 @@ interface CommentsContextProps {
   newId: () => number;
   addComment: (newComment: CommentInterface) => void;
   deleteComment: (id: number) => void;
+  retrieveCommentText: (id: number) => string | undefined;
+  updateComment: (id: number, text: string) => void;
 }
 
 const CommentsContext = createContext<CommentsContextProps | undefined>(
@@ -44,6 +46,39 @@ export const CommentProvider = ({ children }: { children: ReactNode }) => {
     setComments((prevComments) => filterComments(prevComments));
   };
 
+  const retrieveCommentText = (id: number): string | undefined => {
+    const findComment = (
+      comments: CommentInterface[]
+    ): CommentInterface | undefined => {
+      return comments.find((comment) => comment.id === id);
+    };
+
+    const comment = findComment(comments);
+
+    if (comment && typeof comment.content === "string") {
+      return comment.content;
+    }
+
+    return undefined;
+  };
+
+  const updateComment = (id: number, text: string) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.id === id) {
+          return { ...comment, content: text };
+        }
+        if (comment.replies) {
+          const updatedReplies = comment.replies.map((reply) =>
+            reply.id === id ? { ...reply, content: text } : reply
+          );
+          return { ...comment, replies: updatedReplies };
+        }
+        return comment;
+      })
+    );
+  };
+
   return (
     <CommentsContext.Provider
       value={{
@@ -52,6 +87,8 @@ export const CommentProvider = ({ children }: { children: ReactNode }) => {
         addComment,
         newId,
         deleteComment,
+        retrieveCommentText,
+        updateComment,
       }}
     >
       {children}

@@ -1,13 +1,12 @@
-import { ReactNode } from "react";
-
 export interface CommentInterface {
   id: number;
-  content: ReactNode;
+  content: string;
   date: string;
   score: number;
   avatar: string;
   username: string;
   replies?: ReplyInterface[];
+  replyingTo?: string;
 }
 
 export interface ReplyInterface extends Omit<CommentInterface, "replies"> {
@@ -16,7 +15,7 @@ export interface ReplyInterface extends Omit<CommentInterface, "replies"> {
 
 export const GetUserComment = (data: {
   id: number;
-  content: ReactNode;
+  content: string;
   createdAt: string;
   score: number;
   user: {
@@ -26,7 +25,7 @@ export const GetUserComment = (data: {
   replies?:
     | {
         id: number;
-        content: ReactNode;
+        content: string;
         createdAt: string;
         score: number;
         replyingTo: string;
