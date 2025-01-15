@@ -69,7 +69,7 @@ export const Comment = ({
         className="w-full flex flex-col items-end"
       >
         <div className="h-fit rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-[10px]">
             <div className="w-9 h-9">
               <img
                 className="w-full h-full"
@@ -78,6 +78,11 @@ export const Comment = ({
               />
             </div>
             <h2 className="text-neutral-darkBlue font-medium">{username}</h2>
+            {CurrentUser.username === username ? (
+              <span className="bg-primary-moderateBlue text-white text-sm px-1">
+                you
+              </span>
+            ) : null}
             <span className="text-neutral-grayishBlue text-sm">{date}</span>
           </div>
 
@@ -116,7 +121,7 @@ export const Comment = ({
           </div>
         </div>
 
-        <div className="w-full my-4">
+        <div className="w-full my-1">
           {openReply ? <WriteComment btnText="REPLY" /> : null}
         </div>
 

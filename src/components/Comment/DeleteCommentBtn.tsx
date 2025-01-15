@@ -87,7 +87,7 @@ export const Modal = ({
           <motion.div
             {...anim({ variants: ModalVariants })}
             onClick={(e) => e.stopPropagation()}
-            className="fixed z-20 top-1/2 left-1/2 bg-white h-[35%] w-11/12 shadow-2xl rounded-xl flex flex-col justify-center items-center gap-6"
+            className="fixed z-20 top-1/2 left-1/2 bg-white min-h-[340px] h-[35%] w-11/12 shadow-2xl rounded-xl flex flex-col justify-center items-center gap-6"
           >
             <IoIosWarning className="w-20 h-20 bg-red-300/25 rounded-full p-3 text-red-400" />
             <h1 className="text-2xl font-bold">Delete Comment</h1>
@@ -97,13 +97,13 @@ export const Modal = ({
             <div className="flex gap-3">
               <button
                 onClick={onClose}
-                className="bg-gray-400/20 text-gray-600 font-medium rounded-[40px] text-lg py-3 px-8"
+                className="bg-gray-400/20 text-gray-600 font-medium rounded-[40px] text-lg py-3 px-7"
               >
                 No, Keep It.
               </button>
               <button
                 onClick={onDelete}
-                className="bg-red-500/95 text-white font-medium rounded-[40px] text-lg py-3 px-8"
+                className="bg-red-500/95 text-white font-medium rounded-[40px] text-lg py-3 px-7"
               >
                 Yes, Delete!
               </button>
