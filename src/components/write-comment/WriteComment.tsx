@@ -3,15 +3,25 @@ import DottedButton from "./DottedButton";
 import { Form, Formik } from "formik";
 import data from "../../data.json";
 import { useComment } from "../CommentContext";
+import { useRef } from "react";
 
 export const WriteComment = ({ btnText = "SEND" }) => {
+  const formikRef = useRef<any>(null);
   const { avatar, username } = GetCurrentUser(data);
 
   const { addComment, newId } = useComment();
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      formikRef.current?.submitForm();
+    }
+  };
+
   return (
     <div className="p-4 rounded-md relative z-0 bg-white h-full">
       <Formik
+        innerRef={formikRef}
         initialValues={{ comment: "" }}
         onSubmit={(values, actions) => {
           addComment({
@@ -36,6 +46,7 @@ export const WriteComment = ({ btnText = "SEND" }) => {
               onChange={props.handleChange}
               onBlur={props.handleBlur}
               value={props.values.comment}
+              onKeyDown={handleKeyDown}
             />
             <div className="flex justify-between">
               <img className="w-9 h-9" src={avatar} alt="Avatar icon" />

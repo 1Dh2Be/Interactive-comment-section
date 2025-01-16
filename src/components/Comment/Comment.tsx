@@ -100,7 +100,6 @@ export const Comment = ({
                   you
                 </span>
               ) : null}
-              <span className="text-neutral-grayishBlue text-sm">{date}</span>
               <div className="flex gap-2 ml-auto">
                 <DeleteCommentBtn noText={true} id={id} />
                 <EditComment
@@ -111,37 +110,29 @@ export const Comment = ({
               </div>
             </div>
 
-            {replyingTo ? (
-              <p>
-                <span className="text-primary-moderateBlue font-medium">
-                  @{replyingTo + " "}
-                </span>
-                {content}
-              </p>
-            ) : (
-              <Formik
-                innerRef={formikRef}
-                initialValues={{
-                  text: content,
-                }}
-                onSubmit={(values, actions) => {
-                  handleUpdate(values.text);
-                  actions.setSubmitting(false);
-                }}
-              >
-                {(props) => (
-                  <Form>
-                    <textarea
-                      name="text"
-                      onBlur={props.handleBlur}
-                      onChange={props.handleChange}
-                      value={props.values.text}
-                      onKeyDown={handleKeyDown}
-                    />
-                  </Form>
-                )}
-              </Formik>
-            )}
+            <Formik
+              innerRef={formikRef}
+              initialValues={{
+                text: content,
+              }}
+              onSubmit={(values, actions) => {
+                handleUpdate(values.text);
+                actions.setSubmitting(false);
+              }}
+            >
+              {(props) => (
+                <Form>
+                  <textarea
+                    name="text"
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                    value={props.values.text}
+                    onKeyDown={handleKeyDown}
+                    className="w-full h-[60%] border rounded-md px-5 pt-3 outline-none"
+                  />
+                </Form>
+              )}
+            </Formik>
 
             <div className="flex justify-between items-center">
               <div className="w-20 h-8 rounded-lg bg-primary-lightGrayishBlue/30 flex justify-between items-center px-2">
