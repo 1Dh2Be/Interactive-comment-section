@@ -1,6 +1,4 @@
-import { FaPlus } from "react-icons/fa";
-import { FaMinus } from "react-icons/fa";
-import { FaReply } from "react-icons/fa";
+import { FaPlus, FaMinus, FaReply } from "react-icons/fa";
 import { useRef, useState } from "react";
 import { CommentInterface } from "../../utils/GetUserComment";
 import { GetCurrentUser } from "../../utils/GetCurrentUser";
@@ -13,7 +11,6 @@ import { useComment } from "../CommentContext";
 import { Form, Formik } from "formik";
 import { FiMessageSquare } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
-import { replyArrowRotation } from "../../utils/Anim";
 import { WriteReply } from "../write-comment/WriteReply";
 
 export const Comment = ({
@@ -34,25 +31,11 @@ export const Comment = ({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showReplies, setShowReplies] = useState<boolean>(false);
 
-  const increment = () => {
-    if (userVote === undefined || userVote - 1) {
-      setUserVote(+1);
-      setCount((prevCount) => prevCount + 1);
+  const updateVote = (vote: number) => {
+    if (userVote !== vote) {
+      setUserVote(vote);
+      setCount((prevCount) => prevCount + vote);
     }
-    return;
-  };
-
-  const decrement = () => {
-    if (userVote === undefined || userVote === 1) {
-      setUserVote(-1);
-      setCount((prevCount) => {
-        if (prevCount === 0) {
-          return prevCount;
-        }
-        return prevCount - 1;
-      });
-    }
-    return;
   };
 
   const handleUpdate = (newText: string) => {
@@ -70,29 +53,19 @@ export const Comment = ({
   const CurrentUser = GetCurrentUser(data);
 
   const commentVariants = {
-    initial: {
-      x: "100%",
-      opacity: 0,
-    },
+    initial: { x: "100%", opacity: 0 },
     animate: {
       x: 0,
       opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-      },
+      transition: { type: "spring", stiffness: 260, damping: 20 },
     },
     exit: {
       x: "-100%",
       opacity: 0,
-      transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-      },
+      transition: { type: "spring", stiffness: 260, damping: 20 },
     },
   };
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -102,35 +75,26 @@ export const Comment = ({
       >
         {isEditing ? (
           <div className="h-fit rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
-            <div className="flex items-center gap-[8px]">
-              <div className="w-9 h-9">
-                <img
-                  className="w-full h-full"
-                  src={avatar}
-                  alt="User avatar image"
-                />
-              </div>
+            <div className="flex items-center gap-2">
+              <img className="w-9 h-9" src={avatar} alt="User avatar" />
               <h2 className="text-neutral-darkBlue font-medium">{username}</h2>
-              {CurrentUser.username === username ? (
+              {CurrentUser.username === username && (
                 <span className="bg-primary-moderateBlue text-white text-sm px-1">
                   you
                 </span>
-              ) : null}
+              )}
               <div className="flex gap-2 ml-auto">
-                <DeleteCommentBtn noText={true} id={id} />
+                <DeleteCommentBtn noText id={id} />
                 <EditComment
-                  noText={true}
+                  noText
                   setIsEditing={setIsEditing}
                   isEditing={isEditing}
                 />
               </div>
             </div>
-
             <Formik
               innerRef={formikRef}
-              initialValues={{
-                text: content,
-              }}
+              initialValues={{ text: content }}
               onSubmit={(values, actions) => {
                 handleUpdate(values.text);
                 actions.setSubmitting(false);
@@ -149,21 +113,28 @@ export const Comment = ({
                 </Form>
               )}
             </Formik>
-
             <div className="flex justify-between items-center">
               <div className="w-20 h-8 rounded-lg bg-primary-lightGrayishBlue/30 flex justify-between items-center px-2">
                 <FaPlus
-                  onClick={increment}
-                  className="text-primary-lightGrayishBlue"
-                  size="12px"
+                  onClick={() => updateVote(1)}
+                  className={`cursor-pointer hover:bg-primary-moderateBlue/50 hover:rounded-md ${
+                    userVote === 1
+                      ? "bg-primary-moderateBlue/50 rounded-md text-primary-lightGrayishBlue"
+                      : "text-primary-lightGrayishBlue"
+                  } p-[2px]`}
+                  size="16px"
                 />
                 <span className="text-primary-moderateBlue font-bold">
                   {count}
                 </span>
                 <FaMinus
-                  onClick={decrement}
-                  className="text-primary-lightGrayishBlue"
-                  size="12px"
+                  onClick={() => updateVote(-1)}
+                  className={`cursor-pointer hover:bg-primary-moderateBlue/50 hover:rounded-md ${
+                    userVote === -1
+                      ? "bg-primary-moderateBlue/50 rounded-md text-primary-lightGrayishBlue"
+                      : "text-primary-lightGrayishBlue"
+                  } p-[2px]`}
+                  size="16px"
                 />
               </div>
               <button
@@ -176,55 +147,45 @@ export const Comment = ({
           </div>
         ) : (
           <div className="h-fit rounded-xl bg-white mt-4 p-4 flex flex-col gap-3 w-full">
-            <div className="flex items-center gap-[8px]">
-              <div className="w-9 h-9">
-                <img
-                  className="w-full h-full"
-                  src={avatar}
-                  alt="User avatar image"
-                />
-              </div>
+            <div className="flex items-center gap-2">
+              <img className="w-9 h-9" src={avatar} alt="User avatar" />
               <h2 className="text-neutral-darkBlue font-medium">{username}</h2>
-              {CurrentUser.username === username ? (
+              {CurrentUser.username === username && (
                 <span className="bg-primary-moderateBlue text-white text-sm px-1">
                   you
                 </span>
-              ) : null}
+              )}
               <span className="text-neutral-grayishBlue text-sm">{date}</span>
             </div>
-
-            {replyingTo ? (
-              <p>
+            <p>
+              {replyingTo && (
                 <span className="text-primary-moderateBlue font-medium">
-                  {"@" + replyingTo + " "}
+                  @{replyingTo}{" "}
                 </span>
-                {content}
-              </p>
-            ) : (
-              <p>{content}</p>
-            )}
-
+              )}
+              {content}
+            </p>
             <div className="flex justify-between items-center">
               <div className="w-20 h-8 rounded-lg bg-primary-lightGrayishBlue/30 flex justify-between items-center px-2">
                 <FaPlus
-                  onClick={increment}
-                  className={`${
+                  onClick={() => updateVote(1)}
+                  className={`cursor-pointer hover:bg-primary-moderateBlue/50 hover:rounded-md ${
                     userVote === 1
-                      ? "bg-primary-moderateBlue/50 rounded-md active:scale-125 active:bg-primary-moderateBlue active:text-white transition-all duration-150 p-[2px] text-primary-lightGrayishBlue"
-                      : "text-primary-lightGrayishBlue p-[2px]"
-                  } `}
+                      ? "bg-primary-moderateBlue/50 rounded-md text-primary-lightGrayishBlue"
+                      : "text-primary-lightGrayishBlue"
+                  } p-[2px]`}
                   size="16px"
                 />
                 <span className="text-primary-moderateBlue font-bold">
                   {count}
                 </span>
                 <FaMinus
-                  onClick={decrement}
-                  className={`${
+                  onClick={() => updateVote(-1)}
+                  className={`cursor-pointer hover:bg-primary-moderateBlue/50 hover:rounded-md ${
                     userVote === -1
-                      ? "bg-primary-moderateBlue/50 rounded-md active:scale-125 active:bg-primary-moderateBlue active:text-white transition-all duration-150 p-[2px] text-primary-lightGrayishBlue"
-                      : "text-primary-lightGrayishBlue p-[2px]"
-                  } `}
+                      ? "bg-primary-moderateBlue/50 rounded-md text-primary-lightGrayishBlue"
+                      : "text-primary-lightGrayishBlue"
+                  } p-[2px]`}
                   size="16px"
                 />
               </div>
@@ -238,7 +199,7 @@ export const Comment = ({
                 </div>
               ) : (
                 <div
-                  className="flex gap-3 items-center"
+                  className="flex gap-3 items-center cursor-pointer"
                   onClick={() => setOpenReply(true)}
                 >
                   <FaReply className="text-primary-moderateBlue" />
@@ -246,30 +207,32 @@ export const Comment = ({
                 </div>
               )}
             </div>
-            {replies && replies.length > 0 ? (
+            {replies && replies.length > 0 && (
               <>
                 <div className="border-t-2" />
                 <div
-                  className="flex items-center gap-2 px-2"
+                  className="flex items-center gap-2 px-2 cursor-pointer"
                   onClick={() => setShowReplies(!showReplies)}
                 >
                   <FiMessageSquare />
-                  <p className="text-black">{`See replies (${replies.length})`}</p>
+                  <p className="text-black">See replies ({replies.length})</p>
                   <motion.span
                     initial="initial"
                     animate={showReplies ? "animate" : "exit"}
-                    variants={replyArrowRotation}
+                    variants={{
+                      initial: { rotate: 0 },
+                      animate: { rotate: 180 },
+                    }}
                   >
                     <IoIosArrowUp />
                   </motion.span>
                 </div>
               </>
-            ) : null}
+            )}
           </div>
         )}
-
         <div className="w-full my-2">
-          {openReply ? (
+          {openReply && (
             <WriteReply
               id={id}
               replyUsername={username}
@@ -277,23 +240,12 @@ export const Comment = ({
               setOpenReply={setOpenReply}
               setShowReplies={setShowReplies}
             />
-          ) : null}
+          )}
         </div>
-
         {replies && replies.length > 0 && showReplies && (
           <div className="w-11/12">
-            {replies.map((reply: any) => (
-              <Comment
-                key={reply.id}
-                id={reply.id}
-                avatar={reply.avatar}
-                username={reply.username}
-                date={reply.date}
-                content={reply.content}
-                score={reply.score}
-                replies={reply.replies}
-                replyingTo={reply.replyingTo}
-              />
+            {replies.map((reply) => (
+              <Comment key={reply.id} {...reply} />
             ))}
           </div>
         )}

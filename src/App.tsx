@@ -6,7 +6,7 @@ function App() {
   const { comments } = useComment();
 
   return (
-    <main className="w-11/12 h-screen lg:w-4/5 mx-auto flex flex-col">
+    <main className="w-11/12 h-screen lg:w-4/5 xl:w-3/5 2xl:w-2/5 mx-auto flex flex-col">
       <section className="flex-[80%] overflow-auto">
         {comments.map((comment) => {
           return (
