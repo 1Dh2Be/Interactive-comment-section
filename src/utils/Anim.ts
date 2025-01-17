@@ -12,3 +12,23 @@ export const anim = ({ variants }: { variants: typeof ModalVariants }) => {
     variants,
   };
 };
+
+export const replyArrowRotation = {
+  initial: {
+    rotate: 0,
+  },
+  animate: {
+    rotate: 180,
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+  exit: {
+    rotate: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};

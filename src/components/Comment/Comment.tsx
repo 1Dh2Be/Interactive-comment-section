@@ -12,6 +12,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { WriteComment } from "../write-comment/WriteComment";
 import { useComment } from "../CommentContext";
 import { Form, Formik } from "formik";
+import { FiMessageSquare } from "react-icons/fi";
+import { IoIosArrowUp } from "react-icons/io";
+import { replyArrowRotation } from "../../utils/Anim";
 
 export const Comment = ({
   id,
@@ -27,8 +30,9 @@ export const Comment = ({
   const { updateComment } = useComment();
   const [count, setCount] = useState<number>(score);
   const [userVote, setUserVote] = useState<number | undefined>(undefined);
-  const [openReply, setOpenReply] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [openReply, setOpenReply] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [showReplies, setShowReplies] = useState<boolean>(false);
 
   const increment = () => {
     if (userVote === undefined || userVote - 1) {
@@ -192,7 +196,7 @@ export const Comment = ({
             {replyingTo ? (
               <p>
                 <span className="text-primary-moderateBlue font-medium">
-                  {replyingTo + " "}
+                  {"@" + replyingTo + " "}
                 </span>
                 {content}
               </p>
@@ -242,6 +246,25 @@ export const Comment = ({
                 </div>
               )}
             </div>
+            {replies && replies.length > 0 ? (
+              <>
+                <div className="border-t-2" />
+                <div
+                  className="flex items-center gap-2 px-2"
+                  onClick={() => setShowReplies(!showReplies)}
+                >
+                  <FiMessageSquare />
+                  <p className="text-black">{`See replies (${replies.length})`}</p>
+                  <motion.span
+                    initial="initial"
+                    animate={showReplies ? "animate" : "exit"}
+                    variants={replyArrowRotation}
+                  >
+                    <IoIosArrowUp />
+                  </motion.span>
+                </div>
+              </>
+            ) : null}
           </div>
         )}
 
@@ -249,7 +272,7 @@ export const Comment = ({
           {openReply ? <WriteComment btnText="REPLY" /> : null}
         </div>
 
-        {replies && replies.length > 0 && (
+        {replies && replies.length > 0 && showReplies && (
           <div className="w-11/12">
             {replies.map((reply: any) => (
               <Comment
