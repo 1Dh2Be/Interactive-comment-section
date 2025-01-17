@@ -26,17 +26,29 @@ export const Comment = ({
   const formikRef = useRef<any>(null);
   const { updateComment } = useComment();
   const [count, setCount] = useState<number>(score);
+  const [userVote, setUserVote] = useState<number | undefined>(undefined);
   const [openReply, setOpenReply] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const increment = () => setCount((prevCount) => prevCount + 1);
+  const increment = () => {
+    if (userVote === undefined || userVote - 1) {
+      setUserVote(+1);
+      setCount((prevCount) => prevCount + 1);
+    }
+    return;
+  };
+
   const decrement = () => {
-    setCount((prevCount) => {
-      if (prevCount === 0) {
-        return prevCount;
-      }
-      return prevCount - 1;
-    });
+    if (userVote === undefined || userVote === 1) {
+      setUserVote(-1);
+      setCount((prevCount) => {
+        if (prevCount === 0) {
+          return prevCount;
+        }
+        return prevCount - 1;
+      });
+    }
+    return;
   };
 
   const handleUpdate = (newText: string) => {
@@ -192,16 +204,24 @@ export const Comment = ({
               <div className="w-20 h-8 rounded-lg bg-primary-lightGrayishBlue/30 flex justify-between items-center px-2">
                 <FaPlus
                   onClick={increment}
-                  className="text-primary-lightGrayishBlue"
-                  size="12px"
+                  className={`${
+                    userVote === 1
+                      ? "bg-primary-moderateBlue/50 rounded-md active:scale-125 active:bg-primary-moderateBlue active:text-white transition-all duration-150 p-[2px] text-primary-lightGrayishBlue"
+                      : "text-primary-lightGrayishBlue p-[2px]"
+                  } `}
+                  size="16px"
                 />
                 <span className="text-primary-moderateBlue font-bold">
                   {count}
                 </span>
                 <FaMinus
                   onClick={decrement}
-                  className="text-primary-lightGrayishBlue"
-                  size="12px"
+                  className={`${
+                    userVote === -1
+                      ? "bg-primary-moderateBlue/50 rounded-md active:scale-125 active:bg-primary-moderateBlue active:text-white transition-all duration-150 p-[2px] text-primary-lightGrayishBlue"
+                      : "text-primary-lightGrayishBlue p-[2px]"
+                  } `}
+                  size="16px"
                 />
               </div>
               {CurrentUser.username === username ? (
