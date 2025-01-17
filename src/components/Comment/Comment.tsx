@@ -9,12 +9,12 @@ import { DeleteCommentBtn } from "./DeleteCommentBtn";
 import { EditComment } from "./EditComment";
 import { anim } from "../../utils/Anim";
 import { AnimatePresence, motion } from "motion/react";
-import { WriteComment } from "../write-comment/WriteComment";
 import { useComment } from "../CommentContext";
 import { Form, Formik } from "formik";
 import { FiMessageSquare } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import { replyArrowRotation } from "../../utils/Anim";
+import { WriteReply } from "../write-comment/WriteReply";
 
 export const Comment = ({
   id,
@@ -269,7 +269,15 @@ export const Comment = ({
         )}
 
         <div className="w-full my-2">
-          {openReply ? <WriteComment btnText="REPLY" /> : null}
+          {openReply ? (
+            <WriteReply
+              id={id}
+              replyUsername={username}
+              btnText="REPLY"
+              setOpenReply={setOpenReply}
+              setShowReplies={setShowReplies}
+            />
+          ) : null}
         </div>
 
         {replies && replies.length > 0 && showReplies && (

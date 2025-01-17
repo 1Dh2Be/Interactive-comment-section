@@ -1,5 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { CommentInterface, GetUserComment } from "../utils/GetUserComment";
+import {
+  CommentInterface,
+  GetUserComment,
+  ReplyInterface,
+} from "../utils/GetUserComment";
 import data from "../data.json";
 
 interface CommentsContextProps {
@@ -10,6 +14,7 @@ interface CommentsContextProps {
   deleteComment: (id: number) => void;
   retrieveCommentText: (id: number) => string | undefined;
   updateComment: (id: number, text: string) => void;
+  addReply: (id: number, newReply: ReplyInterface) => void;
 }
 
 const CommentsContext = createContext<CommentsContextProps | undefined>(
@@ -79,6 +84,20 @@ export const CommentProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const addReply = (id: number, newReply: ReplyInterface) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.id === id) {
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), newReply],
+          };
+        }
+        return comment;
+      })
+    );
+  };
+
   return (
     <CommentsContext.Provider
       value={{
@@ -89,6 +108,7 @@ export const CommentProvider = ({ children }: { children: ReactNode }) => {
         deleteComment,
         retrieveCommentText,
         updateComment,
+        addReply,
       }}
     >
       {children}
